@@ -47,18 +47,11 @@ def results():
     # parameters.
     city = request.args.get('city')
     units = request.args.get('units')
+    api_key = os.getenv('API_KEY')
+    API_URL = f'https://api.openweathermap.org/data/2.5/weather?q={city}&units={units}&appid={api_key}'
 
-    params = {
-        # TODO: Enter query parameters here for the 'appid' (your api key)
-        'apiid': API_KEY,
-        'q' : city, # the city, and the units (metric or imperial).
-        'units' : units
-        
-        # See the documentation here: https://openweathermap.org/current
 
-    }
-
-    result_json = requests.get(API_URL, params=params).json()
+    result_json = requests.get(API_URL).json()
 
     # Uncomment the line below to see the results of the API call!
     pp.pprint(result_json)
@@ -69,15 +62,16 @@ def results():
     # For the sunrise & sunset variables, I would recommend to turn them into
     # datetime objects. You can do so using the `datetime.fromtimestamp()` 
     # function.
+    datetime_object = (datetime.now()).strftime('%A, %B, %D, %Y')
     context = {
-        'date': datetime.now(),
+        'date': datetime_object,
         'city': result_json["name"],
         'description': result_json["weather"][0]["description"],
         'temp': result_json["main"]["temp"],
-        'humidity': result_json["main"]["temp"],
+        'humidity': result_json["main"]["humidity"],
         'wind_speed': result_json["wind"]["speed"],
-        'sunrise':datetime.fromtimestamp()result_json,
-        'sunset': datetime.fromtimestamp()result_json,
+        'sunrise':datetime.fromtimestamp(result_json["sys"]["sunrise"]),
+        'sunset': datetime.fromtimestamp(result_json["sys"]["sunset"]),
         'units_letter': get_letter_for_units(units)
     }
 
