@@ -71,13 +71,13 @@ def results():
     # function.
     context = {
         'date': datetime.now(),
-        'city': '',
-        'description': '',
-        'temp': '',
-        'humidity': '',
-        'wind_speed': '',
-        'sunrise': '',
-        'sunset': '',
+        'city': result_json["name"],
+        'description': result_json["weather"][0]["description"],
+        'temp': result_json["main"]["temp"],
+        'humidity': result_json["main"]["temp"],
+        'wind_speed': result_json["wind"]["speed"],
+        'sunrise':datetime.fromtimestamp()result_json,
+        'sunset': datetime.fromtimestamp()result_json,
         'units_letter': get_letter_for_units(units)
     }
 
