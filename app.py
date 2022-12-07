@@ -62,7 +62,7 @@ def results():
     # For the sunrise & sunset variables, I would recommend to turn them into
     # datetime objects. You can do so using the `datetime.fromtimestamp()` 
     # function.
-    datetime_object = (datetime.now()).strftime('%A, %B, %D, %Y')
+    datetime_object = (datetime.now()).strftime('%A, %B, %d, %Y')
     context = {
         'date': datetime_object,
         'city': result_json["name"],
@@ -83,24 +83,37 @@ def comparison_results():
     """Displays the relative weather for 2 different cities."""
     # TODO: Use 'request.args' to retrieve the cities & units from the query
     # parameters.
-    city1 = ''
-    city2 = ''
-    units = ''
+    city1 = request.args.get('city1')
+    city2 = request.args.get('city2')
+    units = request.args.get('units')
 
     # TODO: Make 2 API calls, one for each city. HINT: You may want to write a 
     # helper function for this!
-
+    city1_info= compare_city_info(city1, units)
+    city2_info = compare_city_info(city2, units)
+    datetime_object = (datetime.now()).strftime('%A, %B, %d, %Y')
 
     # TODO: Pass the information for both cities in the context. Make sure to
     # pass info for the temperature, humidity, wind speed, and sunset time!
     # HINT: It may be useful to create 2 new dictionaries, `city1_info` and 
     # `city2_info`, to organize the data.
     context = {
+        'city1': city1_info,
+        'city2': city2_info,
+        'units_letter': get_letter_for_units(units),
+        'date': datetime_object,
+        'city1_sunset': datetime.fromtimestamp(city1_info['sys']['sunset']),
+        'city2_sunset': datetime.fromtimestamp(city2_info['sys']['sunset'])
 
     }
 
     return render_template('comparison_results.html', **context)
 
+def compare_city_info(city,units):
+    api_key = os.getenv('API_KEY')
+    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&units={units}&appid={api_key}')
+    data = response.json()
+    return data
 
 if __name__ == '__main__':
     app.config['ENV'] = 'development'

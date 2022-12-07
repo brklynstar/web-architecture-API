@@ -6,30 +6,46 @@
         TODO: Replace the hard-coded cities and date below with data from the 
         server.
     #}
-    <h1>Weather in [CITY1] and [CITY2]</h1>
-    <p>[TODAYS_DATE]</p>
+
+    <h1>Weather in {{city1.name}} and {{city2.name}}</h1>
+    <p>{{date}}</p>
 
 
     {#
-        TODO: Add the temperature, description, and min & max temperature below.
-        Replace 'F' with the appropriate units.
+            TODO: Add the temperature, description, and min & max temperature below.
+            Replace 'F' with the appropriate units.
     #}
-    <p>
-        It is [NUM_DEGREES] [UNITS] [WARMER/COLDER] in [CITY1] than in [CITY2] today.
-    </p>
 
-    <p>
-        The humidity in [CITY1] is [AMOUNT] [GREATER/LESS] than in [CITY2].
-    </p>
 
-    <p>
-        The wind speed in [CITY1] is [AMOUNT] [GREATER/LESS] than in [CITY2].
-    </p>
+    {% if city1.main.temp > city2.main.temp %}
+    <p>It is {{(city1.main.temp - city2.main.temp) |round(2)}}  degrees {{units_letter}} warmer in {{city1.name}} today than in {{city2.name}}</p>
 
-    <p>
-        The sun sets in [CITY1] [HOURS] hours [EARLIER/LATER] than in [CITY2].
-    </p>
-    
+    {% else %}
+    <p>It is {{(city2.main.temp - city1.main.temp) |round(2)}} degrees {{units_letter}} warmer in {{city2.name}} today than in {{city1.name}}</p>
+    {% endif %}
+
+    {% if city1.main.humidity > city2.main.humidity %}
+    <p> There is {{city1.main.humidity - city1.main.humidity }}% more humidity in {{city1.name}} today than in {{city2.name}}</p>
+
+    {% else %}
+    <p>There is {{city2.main.humidity - city1.main.humidity }}% more humidity in {{city1.name}} today than in {{city2.name}}</p>
+    {% endif %}
+
+    {% if city1.wind.speed > city2.wind.speed %}
+    <p>It is {{(city1.wind.speed - city2.wind.speed) |round(2)}} mph windier in {{city2.name}} today than in {{city1.name}}</p>
+
+    {% else %}
+    <p>There are {{(city2.wind.speed - city1.wind.speed) |round(2)}} mph winds in {{city2.name}} today compared to {{city1.name}}'s {{city1.wind.speed}} mph winds</p>
+    {% endif %}
+
+    {% if city1_sunset > city2_sunset %}
+    <p>The sun sets {{(city1_sunset - city2_sunset)}} earlier in {{city1.name}} hours than in {{city2.name}}</p>
+
+    {% else %}
+    <p>The sun sets {{(city2_sunset - city1_sunset)}} earlier in {{city2.name}} hours than in {{city1.name}}</p>
+    {% endif %}
+
+
 </section>
 
 {% endblock %}
