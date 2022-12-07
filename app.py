@@ -45,12 +45,15 @@ def results():
     """Displays results for current weather conditions."""
     # TODO: Use 'request.args' to retrieve the city & units from the query
     # parameters.
-    city = ''
-    units = ''
+    city = request.args.get('city')
+    units = request.args.get('units')
 
     params = {
-        # TODO: Enter query parameters here for the 'appid' (your api key),
-        # the city, and the units (metric or imperial).
+        # TODO: Enter query parameters here for the 'appid' (your api key)
+        'apiid': API_KEY,
+        'q' : city, # the city, and the units (metric or imperial).
+        'units' : units
+        
         # See the documentation here: https://openweathermap.org/current
 
     }
@@ -58,7 +61,7 @@ def results():
     result_json = requests.get(API_URL, params=params).json()
 
     # Uncomment the line below to see the results of the API call!
-    # pp.pprint(result_json)
+    pp.pprint(result_json)
 
     # TODO: Replace the empty variables below with their appropriate values.
     # You'll need to retrieve these from the result_json object above.
